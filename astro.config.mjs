@@ -8,6 +8,11 @@ import { defineConfig, fontProviders } from 'astro/config';
 export default defineConfig({
 	site: 'https://blog.lemaiyanlabs.org',
 	integrations: [mdx(), sitemap()],
+	markdown: {
+		shikiConfig: {
+			theme: 'github-light',
+		},
+	},
 	fonts: [
 		{
 			provider: fontProviders.local(),

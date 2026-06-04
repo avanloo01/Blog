@@ -3,10 +3,10 @@
 	--accent-hover: #16213e;
 	--accent-muted: #0f3460;
 	--text: #1a1a1a;
-	--text-muted: #666;
+	--text-muted: #404040;
 	--border: #e2e2e2;
 	--bg: #ffffff;
-	--bg-subtle: #f8f8f8;
+	--bg-subtle: #e8e8e8;
 	--font-mono: 'JetBrains Mono', 'Fira Mono', 'Cascadia Code', monospace;
 	--max-width: 680px;
 }
