@@ -1,0 +1,95 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	const tagSet = new Set<string>();
+	for (const post of posts) {
+		for (const tag of post.data.tags ?? []) {
+			tagSet.add(tag);
+		}
+	}
+	return Array.from(tagSet).map((tag) => ({
+		params: { tag },
+		props: {
+			posts: posts
+				.filter((p) => p.data.tags?.includes(tag))
+				.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()),
+		},
+	}));
+}
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`#${tag} — ${SITE_TITLE}`} description={`Posts tagged with ${tag}`} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<p class="back"><a href="/tags">&larr; All tags</a></p>
+			<h1>#{tag}</h1>
+			<p class="count">{posts.length} post{posts.length !== 1 ? 's' : ''}</p>
+			<ul class="post-list">
+				{
+					posts.map((post) => (
+						<li>
+							<a href={`/blog/${post.id}/`}>
+								<span class="post-title">{post.data.title}</span>
+								<span class="post-date"><FormattedDate date={post.data.pubDate} /></span>
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.back { margin-bottom: 1.5rem; }
+	.back a { color: var(--text-muted); font-size: 0.9rem; text-decoration: none; }
+	.back a:hover { color: var(--text); }
+	h1 { margin-top: 0; }
+	.count { color: var(--text-muted); font-size: 0.9rem; margin-top: -0.5rem; }
+	.post-list {
+		list-style: none;
+		padding: 0;
+		margin: 1.5rem 0 0;
+	}
+	.post-list li {
+		border-bottom: 1px solid var(--border);
+	}
+	.post-list li:first-child {
+		border-top: 1px solid var(--border);
+	}
+	.post-list a {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: 1rem;
+		padding: 0.85rem 0;
+		text-decoration: none;
+		color: var(--text);
+	}
+	.post-list a:hover .post-title {
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+	.post-title { flex: 1; }
+	.post-date {
+		font-size: 0.85rem;
+		color: var(--text-muted);
+		white-space: nowrap;
+	}
+</style>

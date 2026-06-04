@@ -1,0 +1,103 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import Header from '../components/Header.astro';
+
+type Props = CollectionEntry<'blog'>['data'];
+
+const { title, description, pubDate, updatedDate, tags } = Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+		<!-- Google AdSense — replace ca-pub-XXXXXXXXXXXXXXXX with your publisher ID -->
+		<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+	</head>
+
+	<body>
+		<Header />
+		<main>
+			<article>
+				<div class="prose">
+					<div class="post-header">
+						<h1>{title}</h1>
+						<div class="post-meta">
+							<FormattedDate date={pubDate} />
+							{updatedDate && (
+								<span class="updated">· updated <FormattedDate date={updatedDate} /></span>
+							)}
+						</div>
+						{tags && tags.length > 0 && (
+							<div class="tags">
+								{tags.map((tag) => (
+									<a href={`/tags/${tag}/`} class="tag">{tag}</a>
+								))}
+							</div>
+						)}
+					</div>
+
+					<hr />
+
+					<!-- AdSense in-article placeholder (top) -->
+					<!-- Replace the data-ad-* values with your own once approved -->
+					<!--
+					<ins class="adsbygoogle"
+						style="display:block; text-align:center;"
+						data-ad-layout="in-article"
+						data-ad-format="fluid"
+						data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+						data-ad-slot="XXXXXXXXXX"></ins>
+					<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+					-->
+
+					<slot />
+				</div>
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.prose {
+		width: var(--max-width);
+		max-width: calc(100% - 2rem);
+		margin: 0 auto;
+	}
+	.post-header {
+		margin-bottom: 0;
+	}
+	.post-header h1 {
+		margin-bottom: 0.5rem;
+	}
+	.post-meta {
+		font-size: 0.875rem;
+		color: var(--text-muted);
+		margin-bottom: 0.75rem;
+	}
+	.updated {
+		font-style: italic;
+	}
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+		margin-bottom: 0.5rem;
+	}
+	.tag {
+		font-size: 0.75rem;
+		padding: 2px 8px;
+		border: 1px solid var(--border);
+		border-radius: 3px;
+		color: var(--text-muted);
+		text-decoration: none;
+		background: var(--bg-subtle);
+	}
+	.tag:hover {
+		border-color: var(--text-muted);
+		color: var(--text);
+	}
+</style>

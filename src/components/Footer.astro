@@ -1,0 +1,36 @@
+---
+const today = new Date();
+---
+
+<footer>
+	<div class="footer-inner">
+		<span>&copy; {today.getFullYear()} Lemaiyan Labs</span>
+	</div>
+</footer>
+
+<style>
+	footer {
+		border-top: 1px solid var(--border);
+		padding: 1.5rem 1rem;
+		margin-top: 4rem;
+	}
+	.footer-inner {
+		max-width: var(--max-width);
+		margin: 0 auto;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: 0.85rem;
+		color: var(--text-muted);
+	}
+	.footer-inner a {
+		color: var(--text-muted);
+		text-decoration: none;
+	}
+	.footer-inner a:hover {
+		color: var(--text);
+	}
+	.sep {
+		opacity: 0.4;
+	}
+</style>
